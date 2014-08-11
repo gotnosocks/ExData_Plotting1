@@ -11,10 +11,20 @@ GetData <- function() {
         unzip(zipfile = "household_power_consumption.zip")
     }
     
-    data <- read.csv(file = "household_power_consumption.txt",
-             header = TRUE,
-             sep = ";",
-             na.strings="?")
+    column.names <- read.csv(file = "household_power_consumption.txt",
+                             nrows = 1,
+                             sep = ";",
+                             header = FALSE
+                             )
+    column.names <- c(t(column.names))
+    
+    data <- read.csv(file = "household_power_consumption.txt", 
+                     na.strings="?",
+                     skip = 66636,
+                     nrows = 2880,
+                     sep = ";",
+                     col.names = column.names
+                     )
     
     DateTime <- strptime(paste(data$Date,data$Time, sep = " "),
                               format = "%d/%m/%Y %H:%M:%S")
@@ -22,10 +32,7 @@ GetData <- function() {
     
     data <- data[,!(names(data) %in% c("Date","Time"))]
     
-    data
-    
-    # subset to 1 and 2 Feb 2007
-    
+    data    
     
 }
 
